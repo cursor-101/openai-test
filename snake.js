@@ -10,18 +10,52 @@ let gameInterval;
 
 function draw() {
     ctx.clearRect(0, 0, canvasSize, canvasSize);
-    // Draw snake
-    ctx.fillStyle = '#0f0';
+    // Draw snake (as circles)
     for (let i = 0; i < snake.length; i++) {
-        ctx.fillRect(snake[i].x, snake[i].y, box, box);
+        ctx.beginPath();
+        ctx.arc(snake[i].x + box/2, snake[i].y + box/2, box/2 - 2, 0, Math.PI * 2);
+        ctx.fillStyle = i === 0 ? '#0c0' : '#0f0'; // 머리는 더 진하게
+        ctx.fill();
+        ctx.closePath();
+        // Draw eyes on head
+        if (i === 0) {
+            drawEyes(snake[0]);
+        }
     }
-    // Draw food
+    // Draw food (circle)
+    ctx.beginPath();
+    ctx.arc(food.x + box/2, food.y + box/2, box/2 - 2, 0, Math.PI * 2);
     ctx.fillStyle = '#f00';
-    ctx.fillRect(food.x, food.y, box, box);
+    ctx.fill();
+    ctx.closePath();
     // Draw score
     ctx.fillStyle = '#fff';
     ctx.font = '20px Arial';
     ctx.fillText('Score: ' + score, 10, 25);
+}
+
+function drawEyes(head) {
+    // 방향에 따라 눈 위치 조정
+    let offset = 4;
+    let x = head.x + box/2;
+    let y = head.y + box/2;
+    let dx = 0, dy = 0;
+    if (direction === 'LEFT') dx = -offset;
+    if (direction === 'RIGHT') dx = offset;
+    if (direction === 'UP') dy = -offset;
+    if (direction === 'DOWN') dy = offset;
+    // 왼쪽 눈
+    ctx.beginPath();
+    ctx.arc(x - 4 + dx/2, y - 4 + dy/2, 2.5, 0, Math.PI * 2);
+    ctx.fillStyle = '#fff';
+    ctx.fill();
+    ctx.closePath();
+    // 오른쪽 눈
+    ctx.beginPath();
+    ctx.arc(x + 4 + dx/2, y - 4 + dy/2, 2.5, 0, Math.PI * 2);
+    ctx.fillStyle = '#fff';
+    ctx.fill();
+    ctx.closePath();
 }
 
 function spawnFood() {
