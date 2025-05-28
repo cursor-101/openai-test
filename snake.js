@@ -41,6 +41,10 @@ function collision(head, array) {
 }
 
 function update() {
+    if (!direction) {
+        draw();
+        return;
+    }
     let head = { x: snake[0].x, y: snake[0].y };
     if (direction === 'LEFT') head.x -= box;
     if (direction === 'UP') head.y -= box;
